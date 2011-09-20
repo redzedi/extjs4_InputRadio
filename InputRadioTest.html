@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>
+            InputRadio Example - Ext4 Testing
+        </title>
+        <link rel="stylesheet" type="text/css" href="extjs4.0.1/resources/css/ext-all.css">
+      
+    </head>
+    <body>
+        <h1>
+            InputRadio test
+        </h1>
+        
+               <div id="inputRadio-example" style="position:absolute;left:200px;top:100px"></div>
+    </body>
+    
+    
+    <script type="text/javascript" src="extjs4.0.1/ext-all-debug-w-comments.js"></script>
+    <script type="text/javascript" src="InputRadio.js"></script>
+    
+    <script>
+      function layoutExampleForm(){
+ 	Ext.create('Ext.form.Panel',{
+		title:'InputRadio Example - Submit online Bid',
+		
+		
+		renderTo:'inputRadio-example',
+		width:420,
+		
+		
+		defaults:{padding:5},
+		items:[
+		{
+		   xtype:'textfield',
+		   fieldLabel:'User Id',
+		   name:'userId'
+		},
+		{
+		   xtype:'radiogroup',
+		   fieldLabel:'Bid Quote',
+		   columns:1,
+		   items:[
+		      {
+		       xtype:'radio',
+		       name:'bidQuote',
+		       boxLabel:'Minimum',
+		       inputValue:-1,
+		       checked:true,//default value
+		       //HACK to pass on the markInvalid to the next event
+			markInvalid:function(){
+			 var inputRadioFld = this.up('radiogroup').down('inputradio');
+			     inputRadioFld.markInvalid.apply(inputRadioFld, arguments);
+		       }
+		     },
+		     {
+		       xtype:'inputradio',
+		       name:'bidQuote',
+		       boxLabel:'Specify Values',
+		       maskRe:/[0-9]/,
+		       msgTarget:'side'
+                }
+		   ],
+		   
+	    
+		}
+		],
+		
+	   buttons:[
+	     
+	     	{
+		    text:'Reset',
+		    handler:function(){
+			this.up('form').getForm().reset();
+		    }
+		 },
+		 
+		 {
+		   text:'Submit',
+		   handler:function(){
+		   	var valuesHash = this.up('form').getForm().getValues(),valArr=[];
+		   	
+		   	//validate
+		   	if(valuesHash.bidQuote !== -1 && (valuesHash.bidQuote === '' || Ext.decode(valuesHash.bidQuote) < 1000)){
+		   	  this.up('form').getForm().markInvalid([{id:'bidQuote',msg:'The value is required and must be > 1000'}]);
+		   	  return ;
+		   	}
+		   	
+		   	Ext.iterate(valuesHash,function(key,val){
+		   	 valArr.push(key+'='+val);
+		   	});
+		   	
+		   	Ext.Msg.alert('Submit values of Form ',valArr.join(',<br>'));
+		   }
+		 }
+		 
+	     ]	
+ 	});	     
+      
+      }
+      
+      
+      
+      Ext.onReady(function(){
+      	Ext.require(['Ext.ux.form.field.InputRadio'],
+      	layoutExampleForm);
+      });
+    </script>
+    
+    
+            
+            
+        
+</html>
