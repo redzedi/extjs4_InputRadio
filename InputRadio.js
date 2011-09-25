@@ -56,6 +56,19 @@ Ext.define('Ext.ux.form.field.InputRadio',{
   initEvents: function() {
         var me = this;
         me.callParent();
+     function clearError(){
+        var me = this,
+            hadError = me.hasActiveError();
+
+        if (hadError) {
+          me.unsetActiveError();
+          me.inputValueTextEl.removeCls(me.invalidCls + '-field');
+           me.doComponentLayout();
+        }
+
+
+      }
+      me.mon(me.inputValueTextEl, 'keypress', clearError, me);
       if(me.maskRe ){
             me.mon(me.inputValueTextEl, 'keypress', me.filterKeys, me);
         }
