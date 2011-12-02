@@ -43,16 +43,19 @@
 		   columns:1,
 		   items:[
 		      {
-		       xtype:'radio',
+		       xtype:'inputradiocompanion',
 		       name:'bidQuote',
 		       boxLabel:'Minimum',
 		       inputValue:-1,
 		       checked:true,//default value
-		       //HACK to pass on the markInvalid to the next event
-			markInvalid:function(){
-			 var inputRadioFld = this.up('radiogroup').down('inputradio');
-			     inputRadioFld.markInvalid.apply(inputRadioFld, arguments);
-		       }
+		     
+		     },
+		     {
+		       xtype:'inputradiocompanion',
+		       name:'bidQuote',
+		       boxLabel:'Maximum',
+		       inputValue:9999
+		     
 		     },
 		     {
 		       xtype:'inputradio',
@@ -68,7 +71,12 @@
 		],
 		
 	   buttons:[
-	     
+	     	{
+		    text:'Load Random values',
+		    handler:function(){
+			this.up('form').getForm().setValues({userId:'test',bidQuote:[-1,1000,9999].slice(Math.floor(Math.random()*3))[0]});
+		    }
+		 },
 	     	{
 		    text:'Reset',
 		    handler:function(){
